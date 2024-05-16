@@ -7,14 +7,14 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain.chains import create_retrieval_chain
 
-api_key = ""
+OPENAI_API_KEY = ""
 
 # Web 정보 파싱
 loader = WebBaseLoader("https://www.datanet.co.kr/news/articleView.html?idxno=183958")
 docs = loader.load()
 
 # 파싱정보 분할 후 벡터 스토어에 임베딩
-embeddings = OpenAIEmbeddings(model="text-embedding-3-large", api_key=api_key)
+embeddings = OpenAIEmbeddings(model="text-embedding-3-large", api_key=OPENAI_API_KEY)
 text_splitter = RecursiveCharacterTextSplitter()
 documents = text_splitter.split_documents(docs)
 vector = FAISS.from_documents(documents, embeddings)
@@ -28,7 +28,7 @@ prompt = ChatPromptTemplate.from_template(
         Question: {input}"""
 )
 
-llm = ChatOpenAI(api_key=api_key)
+llm = ChatOpenAI(api_key=OPENAI_API_KEY)
 document_chain = create_stuff_documents_chain(llm, prompt)
 
 retriever = vector.as_retriever()

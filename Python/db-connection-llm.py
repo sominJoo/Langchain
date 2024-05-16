@@ -19,9 +19,9 @@ db = SQLDatabase.from_uri(pg_uri)
 llm = ChatOpenAI(temperature=0, api_key=OPENAI_API_KEY, model_name='gpt-3.5-turbo')
 
 
-db_chain = SQLDatabaseChain(database=db,llm= llm, verbose=True)
+db_chain = SQLDatabaseChain.from_llm(llm, db, verbose = True)
 
-question = "회사 2023년 총 매출, A팀의 2023년도의 총 매출, 2023년도 A팀 총 매출/회사 총매출 퍼센트를 알려줘"
-response = db_chain.invoke({"query": question})
+question = "회사 2023년 총 매출, A팀의 2023년도의 총 매출, 2023년도 A팀 총 매출/회사 총매출 의 퍼센트를 알려줘"
+response = db_chain.invoke(question)
 print(response["result"])
 
